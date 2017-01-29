@@ -1,0 +1,14 @@
+// Definition of template for CRUD repositories
+// https://spring.io/guides/gs/accessing-data-jpa/
+
+perEntity(function (entity) {
+  return helpers.java.entityName(entity) + 'Repository.java'
+}, '*.java')
+
+__TEMPLATE__
+
+package com.example.application.model.repositories;
+
+public interface <%- helpers.java.entityName(entity) %>Repository
+    extends org.springframework.data.repository.CrudRepository<com.example.application.model.entities.<%- helpers.java.entityName(entity) %>, <%- config.types.id.javaType %>> {
+}

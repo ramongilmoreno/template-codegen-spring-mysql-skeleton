@@ -1,0 +1,15 @@
+single()
+
+__TEMPLATE__
+
+#!/bin/bash
+
+IMAGE_NAME=<%- config.application.name %>-mysql-local-database
+CID_FILE=.$IMAGE_NAME.cid
+
+# Stop container and delete it. Data will be preserved in volume
+if [ -f $CID_FILE ]; then
+    docker stop `cat $CID_FILE` | xargs docker rm
+    rm -f $CID_FILE
+fi
+docker rmi $IMAGE_NAME &>/dev/null

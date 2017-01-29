@@ -1,0 +1,18 @@
+single()
+
+__TEMPLATE__
+
+#!/bin/bash
+
+# Clean MySQL stuff
+IMAGE_NAME=<%- config.application.name %>-mysql-local-database
+CID_FILE=.$IMAGE_NAME.cid
+VOLUME=$IMAGE_NAME
+
+./stop.sh
+docker volume rm $VOLUME
+
+rm .*.cid
+
+# Do not propagate volume clean errors (e.g. clean twice)
+exit 0

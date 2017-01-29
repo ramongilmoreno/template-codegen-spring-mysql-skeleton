@@ -1,0 +1,16 @@
+// Run maven commands with environment variables from config
+
+single()
+
+__TEMPLATE__
+#!/bin/bash
+
+java\
+    -DMYSQL_HOST="<%- config.db.host %>"\
+    -DMYSQL_PORT="<%- config.db.port %>"\
+    -DMYSQL_DATABASE="<%- config.db.name %>"\
+    -DMYSQL_USER="<%- config.db.user %>"\
+    -DMYSQL_PASSWORD="<%- config.db.password %>"\
+    -DWEB_PORT=<%- config.application.port %>\
+    -jar target/<%- config.application.name %>-<%- config.application.version %>.jar\
+    --web

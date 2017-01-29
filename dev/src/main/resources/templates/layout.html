@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" th:fragment="page">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Example Application</title>
+<link rel="stylesheet" type="text/css" href="resources/style.css" />
+<script src="/webjars/jquery/3.1.1-1/jquery.js"></script>
+<script>
+    $(document).ready(function() {
+        console.log('JQuery is up and running...')
+    })
+</script>
+</head>
+<body>
+    <!-- http://stackoverflow.com/a/20449189/1898234 -->
+    <div th:include="this :: content" />
+    <p>
+        <a href="/logout">Logout</a>
+    </p>
+</body>
+</html>

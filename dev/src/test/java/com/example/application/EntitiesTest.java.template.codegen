@@ -1,0 +1,43 @@
+single()
+
+__TEMPLATE__
+
+package com.example.application;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@DataJpaTest
+public class EntitiesTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+        <%_ helpers.utils.foreach(config.db.entities, function (entity) { _%>
+    @Autowired
+    private com.example.application.model.repositories.<%- helpers.java.entityName(entity) %>Repository <%- helpers.java.entityAttributeName(entity) %>Repository;
+        <%_ }) _%>
+
+    @Test
+    public void testExample() throws Exception {
+                <%_ helpers.utils.foreach(config.db.entities, function (entity) { _%>
+        {
+            com.example.application.model.entities.<%- helpers.java.entityName(entity) %> entity = new com.example.application.model.entities.<%- helpers.java.entityName(entity) %>();
+            this.entityManager.persist(entity);
+                        com.example.application.model.entities.<%- helpers.java.entityName(entity) %> found = <%- helpers.java.entityAttributeName(entity) %>Repository.findOne(entity.getId());
+            assertThat(found).isNotNull();
+        }
+                <%_ }) _%>
+        System.out.println("Entities OK");
+    }
+
+}

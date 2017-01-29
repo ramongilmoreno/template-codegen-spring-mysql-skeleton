@@ -1,0 +1,63 @@
+// Definition of template for entities
+
+perEntity(function (entity) {
+  return helpers.java.entityName(entity) + '.java'
+}, '*.java')
+
+__TEMPLATE__
+
+package com.example.application.model.entities;
+
+@javax.persistence.Entity
+@javax.persistence.Table(name = "<%- helpers.sql.entityName(entity) %>")
+public class <%- helpers.java.entityName(entity) %> {
+
+    @javax.persistence.Id
+    private <%- config.types.id.javaType %> id = java.util.UUID.randomUUID().toString();
+    <%_ helpers.utils.foreach(entity.fields, function (field) { _%>
+    @javax.persistence.Column(name = "<%- helpers.sql.fieldName(field) %>")
+    private <%- config.types[field.type].javaType %> <%- helpers.java.fieldAttributeName(field) %>;
+    <%_ }) _%>
+    <%_ helpers.utils.foreach(entity.references, function (reference) { %>
+    @javax.persistence.ManyToOne
+    @javax.persistence.JoinColumn (name = "<%- helpers.sql.referenceName(reference) %>")
+    private com.example.application.model.entities.<%- helpers.java.entityName(helpers.references.targetEntity(reference, config.db.entities)) %> <%- helpers.java.referenceAttributeName(reference) %>;
+    <%_ }) _%>
+    <%_
+    // References on field, not on column any more
+    // http://stackoverflow.com/a/11938290/1898234
+    helpers.references.pointToMe(entity, config.db.entities).forEach(function (reference) {
+    %>
+    @javax.persistence.OneToMany(mappedBy = "<%- helpers.java.referenceAttributeName(reference.reference) %>")
+    private java.util.List<com.example.application.model.entities.<%- helpers.java.entityName(reference.source) %>> <%- helpers.java.entityAttributeName(reference.source) %>s;
+    <%_ }) _%>
+
+    public <%- helpers.java.entityName(entity) %>() {}
+
+    public <%- config.types.id.javaType %> getId () { return id; }
+    public void setId (<%- config.types.id.javaType %> id)  { this.id = id; }
+    <%_ helpers.utils.foreach(entity.fields, function (field) { %>
+    public <%- config.types[field.type].javaType %> get<%- helpers.java.fieldName(field) %> () { return this.<%- helpers.java.fieldAttributeName(field) %>; }
+    public void set<%- helpers.java.fieldName(field) %> (<%- config.types[field.type].javaType %> <%- helpers.java.fieldAttributeName(field) %>) { this.<%- helpers.java.fieldAttributeName(field) %> = <%- helpers.java.fieldAttributeName(field) %>; }
+    <%_ }) _%>
+    <%_ helpers.utils.foreach(entity.references, function (reference) { %>
+    public com.example.application.model.entities.<%- helpers.java.entityName(helpers.references.targetEntity(reference, config.db.entities)) %> get<%- helpers.java.referenceName(reference) %> () { return <%- helpers.java.referenceAttributeName(reference) %>; }
+    public void set<%- helpers.java.referenceName(reference) %>(com.example.application.model.entities.<%- helpers.java.entityName(helpers.references.targetEntity(reference, config.db.entities)) %> v) { this.<%- helpers.java.referenceAttributeName(reference) %> = v; }
+    <%_ }) _%>
+    <%_ helpers.references.pointToMe(entity, config.db.entities).forEach(function (reference) { %>
+    @javax.persistence.OneToMany(mappedBy = "<%- helpers.java.referenceAttributeName(reference.reference) %>")
+    public java.util.List<com.example.application.model.entities.<%- helpers.java.entityName(reference.source) %>> get<%- helpers.java.entityName(reference.source) %>s() { return <%- helpers.java.entityAttributeName(reference.source) %>s; }
+    public void set<%- helpers.java.entityName(reference.source) %>s (java.util.List<com.example.application.model.entities.<%- helpers.java.entityName(reference.source) %>> e) { <%- helpers.java.entityAttributeName(reference.source) %>s = e; }
+    <%_ }) _%>
+
+    public java.lang.String toString () {
+        java.lang.StringBuilder sb = new java.lang.StringBuilder("<%- helpers.utils.name(entity) %>");
+        sb.append(" - id: " + getId());
+        <%_ helpers.utils.foreach(entity.fields, function (field) { _%>
+        if (<%- helpers.java.fieldAttributeName(field) %> != null) {
+            sb.append(" - <%- helpers.utils.name(field) %>: " + <%- helpers.java.fieldAttributeName(field) %>);
+        }
+        <%_ }) _%>
+        return sb.toString();
+    }
+}

@@ -1,0 +1,22 @@
+single()
+
+__TEMPLATE__
+
+#!/bin/bash
+
+# Create and run Docker image of MySQL database with a data volume for persistence
+
+IMAGE_NAME=<%- config.application.name %>-mysql-local-database
+CID_FILE=.$IMAGE_NAME.cid
+VOLUME=$IMAGE_NAME
+
+# Setup a volume
+docker volume create --name $VOLUME
+
+echo Starting local MySQL database in Docker container.
+echo     Docker image name: $IMAGE_NAME
+echo          Exposes port: <%- config.db.port %>
+echo           Volume name: $VOLUME
+
+docker build . -t $IMAGE_NAME
+docker run -p <%- config.db.port %>:<%- config.db.port %> -v $VOLUME:/var/lib/mysql --cidfile=$CID_FILE $IMAGE_NAME

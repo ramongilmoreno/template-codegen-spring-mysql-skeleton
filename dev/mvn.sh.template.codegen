@@ -1,0 +1,26 @@
+// Run maven commands with environment variables from config
+
+single()
+
+__TEMPLATE__
+#!/bin/bash
+
+# http://stackoverflow.com/questions/23316843/get-command-line-arguments-from-spring-bootrun
+# http://stackoverflow.com/a/4824637/1898234
+
+MVN_COMMAND=$1
+if [[ -z "$MVN_COMMAND" ]]; then
+    MVN_COMMAND=spring-boot:run
+else
+    # http://stackoverflow.com/a/3995101/1898234
+    shift
+fi
+
+mvn $MVN_COMMAND\
+    -DMYSQL_HOST="<%- config.db.host %>"\
+    -DMYSQL_PORT="<%- config.db.port %>"\
+    -DMYSQL_DATABASE="<%- config.db.name %>"\
+    -DMYSQL_USER="<%- config.db.user %>"\
+    -DMYSQL_PASSWORD="<%- config.db.password %>"\
+    -DWEB_PORT="<%- config.application.port %>"\
+    -Drun.arguments="$@"

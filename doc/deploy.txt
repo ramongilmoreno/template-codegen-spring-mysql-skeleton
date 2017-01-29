@@ -1,0 +1,8 @@
+Setup the following environment variables:
+
+    MYSQL_HOST      database host address                   (e.g. "127.0.0.1")
+    MYSQL_PORT      database port number                    (e.g. "3306")
+    MYSQL_DATABASE  database name                           (e.g. "Example")
+    MYSQL_USER      database user name                      (e.g. "dbuser")
+    MYSQL_PASSWORD  database user password                  (e.g. "dbpassword")
+    WEB_PORT        port to serve the web application from  (e.g. "8080")

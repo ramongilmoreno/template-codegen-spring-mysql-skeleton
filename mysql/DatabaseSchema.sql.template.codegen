@@ -1,0 +1,22 @@
+single()
+
+__TEMPLATE__
+
+-- Database schema definition
+
+USE <%- config.db.name %>;
+<%_ helpers.utils.foreach(config.db.entities, function (entity) { _%>
+
+CREATE TABLE <%- helpers.sql.entityName(entity) %> (
+    Id <%- config.types.id.sqlType %> PRIMARY KEY<%_ helpers.utils.foreach(entity.fields, function (field) { _%>,
+    <%- helpers.sql.fieldName(field) %> <%- config.types[field.type].sqlType _%>
+    <%_ }) _%>
+    <%_ helpers.utils.foreach(entity.references, function (reference) { _%>,
+    <%- helpers.sql.referenceName(reference) %> <%- config.types.id.sqlType _%>
+    <%_ }) %>
+);
+<%_ }) _%>
+
+INSERT INTO User (Id, Name, Password, Enabled) VALUES ('<%- config.application.administrator.user %>', '<%- config.application.administrator.user %>', '<%- config.application.administrator.password %>', 1);
+
+-- End

@@ -1,0 +1,30 @@
+single()
+
+__TEMPLATE__
+
+package com.example.application.model;
+
+@org.springframework.stereotype.Component
+public class DumpDatabase {
+
+    public static long COUNT = 5;
+
+    @org.springframework.beans.factory.annotation.Autowired
+    protected com.example.application.model.Model _model;
+
+    @org.springframework.transaction.annotation.Transactional
+    public java.lang.String dump() {
+        java.lang.StringBuilder sb = new java.lang.StringBuilder();
+        <%_ helpers.utils.foreach(config.db.entities, function (entity) { _%>
+        {
+            int i = 0;
+            sb.append("<%- helpers.utils.name(entity) %>\n");
+            for (com.example.application.model.entities.<%- helpers.java.entityName(entity) %> entity : _model.repo<%- helpers.java.entityName(entity) %>.findAll()) {
+                sb.append("#" + i++ + " " + entity.toString() + "\n");
+            }
+            sb.append("---\n");
+        }
+        <%_ }) _%>
+        return sb.toString();
+    }
+}

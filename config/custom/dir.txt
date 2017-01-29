@@ -1,0 +1,2 @@
+Put in this directory any files that change the default config
+Do not upload to source code with sensitive credentials (files in this directory are ignored by .gitignore)

@@ -1,0 +1,22 @@
+// Produce Dockerfile with parameters
+
+single()
+
+__TEMPLATE__
+
+# https://hub.docker.com/_/mysql/
+
+# Required for JSON type
+FROM mysql:5.7.8
+
+# Define users and database
+ENV MYSQL_ROOT_PASSWORD <%- config.db.rootPassword %>
+ENV MYSQL_DATABASE <%- config.db.name %>
+ENV MYSQL_USER <%- config.db.user %>
+ENV MYSQL_PASSWORD <%- config.db.password %>
+
+# Init database
+ADD *.sql /docker-entrypoint-initdb.d
+
+# Run
+CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]

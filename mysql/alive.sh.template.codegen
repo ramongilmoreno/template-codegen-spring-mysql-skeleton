@@ -1,0 +1,25 @@
+single()
+
+__TEMPLATE__
+#!/bin/bash
+
+# https://hub.docker.com/_/mysql/
+# Connect to MySQL from the MySQL command line client and run a dummy statement to check connection
+docker run --rm\
+    --net="host" `# See http://stackoverflow.com/a/24326540/1898234 for localhost resolve to the host, not to the container`\
+    mysql mysql\
+    -h<%- config.db.host %>\
+    -P<%- config.db.port %>\
+    -u<%- config.db.user %>\
+    -p<%- config.db.password %>\
+    <%- config.db.name %>\
+    -e "select 1 from dual"
+
+RESULT=$?
+if [ $RESULT -eq 0 ]; then
+    echo Connection to database OK
+else
+    echo Connection to database FAILED
+fi
+
+exit $RESULT

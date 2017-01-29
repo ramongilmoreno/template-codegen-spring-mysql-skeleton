@@ -1,0 +1,9 @@
+single()
+
+__TEMPLATE__
+
+This file shows the current configuration of the project:
+
+<%- JSON.stringify(config, null, '  ') %>
+
+End of configuration

@@ -1,0 +1,14 @@
+single()
+
+__TEMPLATE__
+
+package com.example.application.model;
+
+public class Types {
+
+    public static java.util.Random _random = new java.util.Random();
+
+<%_ helpers.utils.foreach(config.types, function (type) { _%>
+    public static <%- type.javaType %> sample<%- helpers.utils.camel(helpers.utils.name(type)) %> (java.lang.Long l) { if (l == null) { l = new java.lang.Long(_random.nextLong()); }; return ((java.util.function.Function<java.lang.Long, <%- type.javaType %>>) <%- type.sampleValue %>).apply(l); }
+<%_ }) _%>
+}

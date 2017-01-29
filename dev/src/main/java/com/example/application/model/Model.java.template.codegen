@@ -1,0 +1,31 @@
+single()
+
+__TEMPLATE__
+
+package com.example.application.model;
+
+@org.springframework.stereotype.Component
+public class Model {
+
+    //
+    // Repositories
+    //
+<%_ helpers.utils.foreach(config.db.entities, function (entity) { _%>
+    @org.springframework.beans.factory.annotation.Autowired
+    public com.example.application.model.repositories.<%- helpers.java.entityName(entity) %>Repository repo<%- helpers.java.entityName(entity) %>;
+<%_ }) _%>
+
+    //
+    // Sample instances utilities
+    //
+<%_ helpers.utils.foreach(config.db.entities, function (entity) { _%>
+    public static com.example.application.model.entities.<%- helpers.java.entityName(entity) %> sample<%- helpers.java.entityName(entity) %> (java.lang.Long value) {
+        com.example.application.model.entities.<%- helpers.java.entityName(entity) %> sample = new com.example.application.model.entities.<%- helpers.java.entityName(entity) %>();
+        <%_ helpers.utils.foreach(entity.fields, function (field) { _%>
+        sample.set<%- helpers.java.fieldName(field) %>(Types.sample<%- helpers.utils.camel(field.type) %>(value));
+        <%_ }) _%>
+        return sample;
+    }
+
+<%_ }) _%>
+}

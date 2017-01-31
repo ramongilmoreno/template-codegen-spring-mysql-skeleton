@@ -53,3 +53,36 @@ Setup:
                 Spring Tool Suite:
 
                     https://spring.io/tools
+
+
+To run the application:
+
+    Open a new terminal to run the MySQL server with:
+
+        $ gulp mysql:start
+
+    Start the application with:
+
+        $ gulp run
+
+    The entry point is in port 8080:
+
+        http://127.0.0.1:8080
+
+        Credentials are:
+
+            username: admin
+            password: admin
+
+    An alternative way to start the application is to directly invoke the .jar:
+
+        $ cd dev
+        $ mvn package
+        $ ./run.sh
+
+
+Mac OS X incompatibilities:
+
+    This is a list of incompatibilities found in Mac OS X:
+
+        * In script codegen/qa/spaces.sh, the 'xargs -d' option is used (to specify delimiter of xargs input). This option is GNU xargs specific. Does not appear in Mac xargs.
